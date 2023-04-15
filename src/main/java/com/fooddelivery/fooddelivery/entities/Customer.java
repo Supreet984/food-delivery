@@ -65,17 +65,4 @@ public class Customer {
         return true;
     }
 
-    public static void main(String[] args) {
-        Customer customer = new Customer();
-        customer.setName("John");
-        customer.setEmail("sijan");
-        customer.setPhoneNumber("12345678900");
-        try {
-            customer.check();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-
-    }
 }

@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     //get all orders by restaurant id
-    @GetMapping("/all/{restaurantId}")
+    @GetMapping("/all/restaurants{restaurantId}")
     public ResponseEntity<?> getOrdersByRestaurantId(@PathVariable("restaurantId") Long restaurantId) {
         return orderService.getOrdersByRestaurantId(restaurantId);
     }
