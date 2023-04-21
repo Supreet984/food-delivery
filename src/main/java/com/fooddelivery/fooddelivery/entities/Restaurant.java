@@ -34,9 +34,4 @@ public class Restaurant {
 
     @Column(name = "rating")
     private String rating;
-
-    public boolean validate() {
-        return !restaurantName.isEmpty() && !restaurantName.isBlank() && !cuisineType.isEmpty() && !cuisineType.isBlank() && !location.isEmpty() && !location.isBlank() && !rating.isEmpty() && !rating.isBlank();
-    }
-
 }

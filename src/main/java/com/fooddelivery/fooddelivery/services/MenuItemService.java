@@ -1,27 +1,20 @@
-package com.fooddelivery.fooddelivery.services.implementation;
+package com.fooddelivery.fooddelivery.services;
 
 import com.fooddelivery.fooddelivery.entities.MenuItem;
 import com.fooddelivery.fooddelivery.repositories.MenuItemRepository;
-import com.fooddelivery.fooddelivery.services.skeletons.MenuItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-@Service
 @AllArgsConstructor
-public class MenuItemServiceImpl implements MenuItemService {
+@Service
+public class MenuItemService {
     private final MenuItemRepository menuItemRepository;
 
-    @Override
     public ResponseEntity<?> createMenuItem(MenuItem menuItem) {
-        if (menuItem.validate()) {
-            return ResponseEntity.ok(menuItemRepository.save(menuItem));
-        } else {
-            return ResponseEntity.badRequest().body("Invalid menu item");
-        }
+        return ResponseEntity.ok(menuItemRepository.save(menuItem));
     }
 
-    @Override
     public ResponseEntity<?> readMenuItem(Long id) {
         MenuItem menuItem = menuItemRepository.findById(id).orElse(null);
         if (menuItem != null) {
@@ -31,13 +24,9 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
     }
 
-    @Override
     public ResponseEntity<?> updateMenuItem(MenuItem menuItem, Long id) {
         MenuItem menuItem1 = menuItemRepository.findById(id).orElse(null);
         if (menuItem1 != null) {
-            if (!menuItem.validate()) {
-                return ResponseEntity.badRequest().body("Invalid menu item");
-            }
             menuItem.setId(id);
             return ResponseEntity.ok(menuItemRepository.save(menuItem));
         } else {
@@ -45,7 +34,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
     }
 
-    @Override
     public ResponseEntity<?> deleteMenuItem(Long id) {
         MenuItem menuItem = menuItemRepository.findById(id).orElse(null);
         if (menuItem != null) {
@@ -56,7 +44,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
     }
 
-    @Override
     public ResponseEntity<?> readAllMenuItems(Long restaurantId) {
         return ResponseEntity.ok(menuItemRepository.findAllByRestaurantId(restaurantId));
     }

@@ -1,10 +1,13 @@
 package com.fooddelivery.fooddelivery.controllers;
 
+import com.fooddelivery.fooddelivery.dto.MenuItemDto;
 import com.fooddelivery.fooddelivery.entities.MenuItem;
-import com.fooddelivery.fooddelivery.services.skeletons.MenuItemService;
+import com.fooddelivery.fooddelivery.services.MenuItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * MenuItemController
@@ -24,8 +27,9 @@ public class MenuItemController {
 
     //crud
     @PostMapping
-    public ResponseEntity<?> createMenuItem(@RequestBody MenuItem menuItem) {
-        return menuItemService.createMenuItem(menuItem);
+    public ResponseEntity<?> createMenuItem(@RequestBody @Valid MenuItemDto menuItem) {
+        MenuItem menuItem1 = menuItem.buildEntity();
+        return menuItemService.createMenuItem(menuItem1);
     }
 
     @GetMapping("/{id}")
@@ -34,8 +38,9 @@ public class MenuItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
-        return menuItemService.updateMenuItem(menuItem, id);
+    public ResponseEntity<?> updateMenuItem(@PathVariable Long id, @RequestBody @Valid MenuItemDto menuItem) {
+        MenuItem menuItem1 = menuItem.buildEntity();
+        return menuItemService.updateMenuItem(menuItem1, id);
     }
 
     @DeleteMapping("/{id}")
