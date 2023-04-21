@@ -23,9 +23,8 @@ public class CustomerController {
     //crud
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody @Valid CustomerDto customer) {
-        return ResponseEntity.ok().build();
-//        Customer customer1 = CustomerDto.build(0L, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getPhoneNumber(), customer.getDeliveryAddress()).buildEntity();
-//        return customerService.createCustomer(customer1);
+        Customer customer1 = CustomerDto.build(0L, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getPhoneNumber(), customer.getDeliveryAddress()).buildEntity();
+        return customerService.createCustomer(customer1);
     }
 
     @GetMapping
