@@ -2,7 +2,7 @@ package com.fooddelivery.fooddelivery.controllers;
 
 import com.fooddelivery.fooddelivery.dto.CustomerDto;
 import com.fooddelivery.fooddelivery.entities.Customer;
-import com.fooddelivery.fooddelivery.services.skeletons.CustomerService;
+import com.fooddelivery.fooddelivery.services.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +23,9 @@ public class CustomerController {
     //crud
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody @Valid CustomerDto customer) {
-        Customer customer1 = CustomerDto.build(0L, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getPhoneNumber(), customer.getDeliveryAddress()).toEntity();
-        return customerService.createCustomer(customer1);
+        return ResponseEntity.ok().build();
+//        Customer customer1 = CustomerDto.build(0L, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getPhoneNumber(), customer.getDeliveryAddress()).buildEntity();
+//        return customerService.createCustomer(customer1);
     }
 
     @GetMapping
@@ -39,7 +40,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody @Valid CustomerDto customer) {
-        Customer customer1 = CustomerDto.build(id, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getPhoneNumber(), customer.getDeliveryAddress()).toEntity();
+        Customer customer1 = CustomerDto.build(id, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getPhoneNumber(), customer.getDeliveryAddress()).buildEntity();
         return customerService.updateCustomer(customer1, id);
     }
 
@@ -47,4 +48,5 @@ public class CustomerController {
     public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
         return customerService.deleteCustomer(id);
     }
+
 }

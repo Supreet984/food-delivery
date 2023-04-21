@@ -1,32 +1,27 @@
-package com.fooddelivery.fooddelivery.services.implementation;
+package com.fooddelivery.fooddelivery.services;
 
 import com.fooddelivery.fooddelivery.entities.Restaurant;
 import com.fooddelivery.fooddelivery.entities.Review;
 import com.fooddelivery.fooddelivery.repositories.RestaurantRepository;
 import com.fooddelivery.fooddelivery.repositories.ReviewRepository;
-import com.fooddelivery.fooddelivery.services.skeletons.RestaurantService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @AllArgsConstructor
-public class RestaurantServiceImpl implements RestaurantService {
+@Service
+public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final ReviewRepository reviewRepository;
 
-    @Override
+
     public ResponseEntity<?> createRestaurant(Restaurant restaurant) {
-        if (restaurant.validate())
-            return ResponseEntity.ok(restaurantRepository.save(restaurant));
-        else
-            return ResponseEntity.badRequest().body("Invalid restaurant");
+        return ResponseEntity.ok(restaurantRepository.save(restaurant));
     }
 
-    @Override
+
     public ResponseEntity<?> readRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
         if (restaurant != null)
@@ -35,12 +30,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             return ResponseEntity.badRequest().body("Restaurant not found");
     }
 
-    @Override
+
     public ResponseEntity<?> updateRestaurant(Restaurant restaurant, Long id) {
         Restaurant restaurant1 = restaurantRepository.findById(id).orElse(null);
         if (restaurant1 != null) {
-            if (!restaurant.validate())
-                return ResponseEntity.badRequest().body("Invalid restaurant");
             restaurant.setId(id);
             return ResponseEntity.ok(restaurantRepository.save(restaurant));
         } else {
@@ -48,7 +41,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
-    @Override
+
     public ResponseEntity<?> deleteRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
         if (restaurant != null) {
@@ -59,12 +52,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
-    @Override
+
     public ResponseEntity<?> readAllRestaurants() {
         return ResponseEntity.ok(restaurantRepository.findAll());
     }
 
-    @Override
+
     public ResponseEntity<?> searchRestaurant(String name, String category) {
         if (name.equals("null") && category.equals("null") || name.equals("") && category.equals("")) {
             return ResponseEntity.ok(restaurantRepository.findAll());
@@ -81,8 +74,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
-    @Override
-    public ResponseEntity<?> rateRestaurant(Long id, Long userId, int rating) {
+
+    public ResponseEntity<?> rateRestaurant(Long id, Long userId, double rating) {
         Review review = reviewRepository.findByRestaurantIdAndUserId(id, userId);
         if (review != null) {
             review.setRating(rating);
@@ -98,7 +91,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
-    @Override
+
     public ResponseEntity<?> getRating(Long id) {
         List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
         if (reviews.size() == 0)
@@ -117,13 +110,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
-    @Override
+
     public ResponseEntity<?> getNumberOfReviews(Long id) {
         Long count = reviewRepository.countByRestaurantId(id);
         return ResponseEntity.ok(count);
     }
 
-    @Override
     public ResponseEntity<?> getRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
         if (restaurant != null) {

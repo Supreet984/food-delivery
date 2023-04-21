@@ -36,7 +36,6 @@ public class Bootstrap implements CommandLineRunner {
         customer.setPassword("YWRtaW4=");
         customer.setEmail("admin");
         customer.setPhoneNumber("1234567890");
-        customer.setAdmin(true);
         customerRepository.save(customer);
     }
 

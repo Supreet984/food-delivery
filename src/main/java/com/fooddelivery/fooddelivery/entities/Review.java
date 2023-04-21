@@ -25,7 +25,7 @@ public class Review {
     private Long restaurantId;
 
     @Column(name = "rating")
-    private int rating;
+    private double rating;
 
     @Column(name = "review")
     private String review;

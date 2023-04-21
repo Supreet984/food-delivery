@@ -2,6 +2,7 @@ package com.fooddelivery.fooddelivery.dto;
 
 import com.fooddelivery.fooddelivery.entities.Customer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,9 +13,11 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
+@Builder
 public class CustomerDto {
-    private Long id;
 
+
+    private Long id;
     @NotNull(message = "Name cannot be null")
     private String name;
 
@@ -43,7 +46,14 @@ public class CustomerDto {
     }
 
     //dto to entity
-    public Customer toEntity() {
-        return new Customer(this.id, this.name, this.email, this.password, this.phoneNumber, this.deliveryAddress, false);
+    public Customer buildEntity() {
+        return Customer.builder()
+                .id(this.id)
+                .name(this.name)
+                .email(this.email)
+                .password(this.password)
+                .phoneNumber(this.phoneNumber)
+                .deliveryAddress(this.deliveryAddress)
+                .build();
     }
 }

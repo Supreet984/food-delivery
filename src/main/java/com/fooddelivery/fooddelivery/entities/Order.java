@@ -3,6 +3,7 @@ package com.fooddelivery.fooddelivery.entities;
 import lombok.*;
 
 import javax.persistence.*;
+
 /**
  * Order
  * - Represents an order in the database
