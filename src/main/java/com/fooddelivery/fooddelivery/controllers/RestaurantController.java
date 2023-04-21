@@ -1,13 +1,10 @@
 package com.fooddelivery.fooddelivery.controllers;
 
-import com.fooddelivery.fooddelivery.dto.RestaurantDto;
 import com.fooddelivery.fooddelivery.entities.Restaurant;
-import com.fooddelivery.fooddelivery.services.RestaurantService;
+import com.fooddelivery.fooddelivery.services.skeletons.RestaurantService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * RestaurantController
@@ -32,7 +29,7 @@ public class RestaurantController {
 
     //rate a restaurant
     @GetMapping("/rate/{id}/{userId}/{rating}")
-    public ResponseEntity<?> rateRestaurant(@PathVariable("id") Long id, @PathVariable("userId") Long userId, @PathVariable("rating") double rating) {
+    public ResponseEntity<?> rateRestaurant(@PathVariable("id") Long id, @PathVariable("userId") Long userId, @PathVariable("rating") int rating) {
         return restaurantService.rateRestaurant(id, userId, rating);
     }
 
@@ -58,16 +55,14 @@ public class RestaurantController {
 
     //create restaurant
     @PostMapping
-    public ResponseEntity<?> createRestaurant(@RequestBody @Valid RestaurantDto restaurant) {
-        Restaurant restaurant1 = restaurant.buildEntity();
-        return restaurantService.createRestaurant(restaurant1);
+    public ResponseEntity<?> createRestaurant(@RequestBody Restaurant restaurant) {
+        return restaurantService.createRestaurant(restaurant);
     }
 
     //update restaurant
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRestaurant(@PathVariable Long id, @RequestBody @Valid RestaurantDto restaurant) {
-        Restaurant restaurant1 = restaurant.buildEntity();
-        return restaurantService.updateRestaurant(restaurant1, id);
+    public ResponseEntity<?> updateRestaurant(@PathVariable Long id, @RequestBody Restaurant restaurant) {
+        return restaurantService.updateRestaurant(restaurant, id);
     }
 
     //delete restaurant

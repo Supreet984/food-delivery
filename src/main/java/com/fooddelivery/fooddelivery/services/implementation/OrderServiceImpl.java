@@ -1,4 +1,4 @@
-package com.fooddelivery.fooddelivery.services;
+package com.fooddelivery.fooddelivery.services.implementation;
 
 import com.fooddelivery.fooddelivery.entities.Customer;
 import com.fooddelivery.fooddelivery.entities.MenuItem;
@@ -8,6 +8,7 @@ import com.fooddelivery.fooddelivery.repositories.CustomerRepository;
 import com.fooddelivery.fooddelivery.repositories.MenuItemRepository;
 import com.fooddelivery.fooddelivery.repositories.OrderRepository;
 import com.fooddelivery.fooddelivery.repositories.RestaurantRepository;
+import com.fooddelivery.fooddelivery.services.skeletons.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,25 +17,29 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
-public class OrderService {
+@AllArgsConstructor
+public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final MenuItemRepository menuItemRepository;
+
     private final RestaurantRepository restaurantRepository;
 
+    @Override
     public ResponseEntity<?> createOrder(Order order) {
         if (order.validate()) return ResponseEntity.ok(orderRepository.save(order));
         else return ResponseEntity.badRequest().body("Invalid order");
     }
 
+    @Override
     public ResponseEntity<?> readOrder(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) return ResponseEntity.ok(order);
         else return ResponseEntity.badRequest().body("Order not found");
     }
 
+    @Override
     public ResponseEntity<?> updateOrder(Order order, Long id) {
         Order order1 = orderRepository.findById(id).orElse(null);
         if (order1 != null) {
@@ -46,6 +51,7 @@ public class OrderService {
         }
     }
 
+    @Override
     public ResponseEntity<?> deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {
@@ -55,12 +61,14 @@ public class OrderService {
             return ResponseEntity.badRequest().body("Order not found");
         }
     }
+
+    @Override
     public ResponseEntity<?> readAllOrders() {
         return ResponseEntity.ok(orderRepository.findAll());
     }
 
 
-
+    @Override
     public ResponseEntity<?> changeStatus(Long id, String status) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {
@@ -71,7 +79,7 @@ public class OrderService {
         }
     }
 
-
+    @Override
     public ResponseEntity<?> createOrder(Long customerId, Long menuItemId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null) return ResponseEntity.badRequest().body("Customer not found");
@@ -98,14 +106,14 @@ public class OrderService {
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
-
+    @Override
     public ResponseEntity<?> getOrdersByCustomerId(Long id) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer == null) return ResponseEntity.badRequest().body("Customer not found");
         return ResponseEntity.ok(orderRepository.findAllByCustomerId(id));
     }
 
-
+    @Override
     public ResponseEntity<?> getOrdersByRestaurantId(Long id) {
         List<Order> orders = orderRepository.findAll();
         List<Order> ordersByRestaurant = new ArrayList<>();
@@ -118,7 +126,7 @@ public class OrderService {
         return ResponseEntity.ok(ordersByRestaurant);
     }
 
-
+    @Override
     public ResponseEntity<?> getOrdersByStatus(Long id, String status) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer == null) return ResponseEntity.badRequest().body("Customer not found");
@@ -132,7 +140,7 @@ public class OrderService {
         return ResponseEntity.ok(ordersByStatus);
     }
 
-
+    @Override
     public ResponseEntity<?> increaseQuantity(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {
@@ -144,7 +152,7 @@ public class OrderService {
         }
     }
 
-
+    @Override
     public ResponseEntity<?> decreaseQuantity(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {
@@ -161,7 +169,7 @@ public class OrderService {
         }
     }
 
-
+    @Override
     public ResponseEntity<?> completeAllOrders(Long customerId, String deliveryAddress, String paymentMethod) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null) return ResponseEntity.badRequest().body("Customer not found");
@@ -177,7 +185,7 @@ public class OrderService {
         return ResponseEntity.ok("All orders completed");
     }
 
-
+    @Override
     public ResponseEntity<?> getTotalAmount(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null) return ResponseEntity.badRequest().body("Customer not found");
@@ -192,12 +200,12 @@ public class OrderService {
         return ResponseEntity.ok(totalAmount);
     }
 
-
+    @Override
     public ResponseEntity<?> readAllOrdersByStatus(String pending) {
         return ResponseEntity.ok(orderRepository.findAllByStatus(pending));
     }
 
-
+    @Override
     public ResponseEntity<?> getRestaurantByOrderId(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {
@@ -214,7 +222,7 @@ public class OrderService {
         }
     }
 
-
+    @Override
     public ResponseEntity<?> getCustomerByOrderId(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {

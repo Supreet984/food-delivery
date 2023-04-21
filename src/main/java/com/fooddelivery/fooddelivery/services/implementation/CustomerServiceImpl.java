@@ -1,9 +1,9 @@
-package com.fooddelivery.fooddelivery.services;
+package com.fooddelivery.fooddelivery.services.implementation;
 
 import com.fooddelivery.fooddelivery.entities.Customer;
 import com.fooddelivery.fooddelivery.repositories.CustomerRepository;
+import com.fooddelivery.fooddelivery.services.skeletons.CustomerService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,18 @@ import java.util.Base64;
 
 @Service
 @AllArgsConstructor
-public class CustomerService {
+public class CustomerServiceImpl implements CustomerService {
+    private final CustomerRepository customerRepository;
 
-    private CustomerRepository customerRepository;
-
+    @Override
     public ResponseEntity<?> createCustomer(Customer customer) {
+        try {
+            if (!customer.check()) {
+                return ResponseEntity.badRequest().body("Please enter valid details");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         Customer customer1 = customerRepository.findByEmail(customer.getEmail()).orElse(null);
         if (customer1 != null) {
             return ResponseEntity.badRequest().body("Email already exists, please login");
@@ -25,6 +32,7 @@ public class CustomerService {
         return ResponseEntity.ok(customerRepository.save(customer));
     }
 
+    @Override
     public ResponseEntity<?> readCustomer(Long id) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer != null) {
@@ -34,9 +42,17 @@ public class CustomerService {
         }
     }
 
+    @Override
     public ResponseEntity<?> updateCustomer(Customer customer, Long id) {
         Customer customer1 = customerRepository.findById(id).orElse(null);
         if (customer1 != null) {
+            try {
+                if (!customer.check()) {
+                    return ResponseEntity.badRequest().body("Invalid customer");
+                }
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
             customer.setId(id);
             customer.setPassword(Base64.getEncoder().encodeToString(customer.getPassword().getBytes()));
             return ResponseEntity.ok(customerRepository.save(customer));
@@ -45,6 +61,7 @@ public class CustomerService {
         }
     }
 
+    @Override
     public ResponseEntity<?> deleteCustomer(Long id) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer != null) {
@@ -55,10 +72,12 @@ public class CustomerService {
         }
     }
 
+    @Override
     public ResponseEntity<?> readAllCustomer() {
         return ResponseEntity.ok(customerRepository.findAll());
     }
 
+    @Override
     public ResponseEntity<?> searchCustomer(String name) {
         ArrayList<Customer> customers = customerRepository.findBySimilarName(name);
         if (customers.size() > 0) {
@@ -68,7 +87,7 @@ public class CustomerService {
         }
     }
 
-
+    @Override
     public ResponseEntity<?> loginCustomer(Customer customer) {
         customer.setPassword(Base64.getEncoder().encodeToString(customer.getPassword().getBytes()));
         Customer customer1 = customerRepository.findByEmail(customer.getEmail()).orElse(null);

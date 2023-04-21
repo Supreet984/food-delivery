@@ -1,6 +1,6 @@
 package com.fooddelivery.fooddelivery.controllers;
 
-import com.fooddelivery.fooddelivery.services.OrderService;
+import com.fooddelivery.fooddelivery.services.skeletons.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +16,13 @@ public class OrderController {
     private final OrderService orderService;
 
     //get all orders by customer id
-    @GetMapping("/all/customer/{customerId}")
+    @GetMapping("/all/{customerId}")
     public ResponseEntity<?> getOrdersByCustomerId(@PathVariable("customerId") Long customerId) {
         return orderService.getOrdersByCustomerId(customerId);
     }
 
     //get all orders by restaurant id
-    @GetMapping("/all/{restaurantId}")
+    @GetMapping("/all/restaurants{restaurantId}")
     public ResponseEntity<?> getOrdersByRestaurantId(@PathVariable("restaurantId") Long restaurantId) {
         return orderService.getOrdersByRestaurantId(restaurantId);
     }

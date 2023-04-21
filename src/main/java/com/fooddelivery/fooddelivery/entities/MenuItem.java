@@ -38,4 +38,8 @@ public class MenuItem {
 
     @Column(name = "availability")
     private boolean availability;
+
+    public boolean validate() {
+        return !itemName.isEmpty() && !itemName.isBlank() && !description.isEmpty() && !description.isBlank() && !price.isNaN() && !price.isInfinite();
+    }
 }
